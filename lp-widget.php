@@ -6,3 +6,7 @@
  * Author: Daniel Schulz-Jackson
  * Author URI: http://10x.agency/about
  */
+
+
+
+require_once 'includes/widget.php';
