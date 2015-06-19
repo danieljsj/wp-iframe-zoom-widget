@@ -9,6 +9,12 @@
 		// }
 		// no dice. protocols must match; use self-signed cert on localhost: http://brianflove.com/2014/12/01/self-signed-ssl-certificate-on-mac-yosemite/ ... don't have https to dev on, and client sites wouldn't either, so no dice.
 	</script>
+	<script src="../js/vendor/iframeheight.js"></script>
+	<script>
+		$(document).ready(function(){
+		    $('#autoIframe').iframeHeight();
+		});
+	</script>
 </head>
 <body>
 	<div id="placeholder"></div>
@@ -19,9 +25,10 @@
 		src="https://my.leadpages.net/leadbox/14791da73f72a2%3A147c8da44b46dc/5682617542246400/"
 		frameborder="0"
 		width="350px"
-		height="575px"
 		style="overflow:hidden;"
 		onload="//javascript:resizeIframe(this); // no dice"
-	></iframe>
+		id="autoIframe"
+	></iframe><!-- 575px
+	 -->
 </body>
 </html>
