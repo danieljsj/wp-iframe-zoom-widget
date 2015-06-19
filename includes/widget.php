@@ -26,26 +26,33 @@ class wpb_widget extends WP_Widget {
 	// This is where the action happens
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', $instance['title'] );
+		
+		$instance['zoom'] = .67; // CHEATING!!!
 
 		// before and after widget arguments are defined by themes
 		echo $args['before_widget'];
 		if ( ! empty( $title ) )
 			echo $args['before_title'] . $title . $args['after_title'];
 
+
+
 		// This is where you run the code and display the output
 		echo __( 'Here is a leadbox...', 'wpb_widget_domain' );
 
+		$widthStr = sprintf("%.2f%%", ( 1 / $instance['zoom'] ) * 100)
+
+
 		?>
 		<style>
-		    #wrap { width: 100%; min-width: 200px; height: 390px; padding: 0; }
-		    #frame { max-width: 150%; width: 150%; height: 680px; border: 1px solid black; }
+		    #wrap { width: 100%; /*min-width: 200px;*/ height: 390px; padding: 0; }
+		    #frame { max-width: <?php echo $widthStr ?>; width: <?php echo $widthStr ?>; height: 680px; border: 1px solid black; }
 		    #frame {
-		        -ms-zoom: 0.67;
-		        -moz-transform: scale(0.67);
+		        -ms-zoom: <?php echo $instance['zoom']; ?>;
+		        -moz-transform: scale( <?php echo $instance['zoom']; ?> );
 		        -moz-transform-origin: 0 0;
-		        -o-transform: scale(0.67);
+		        -o-transform: scale( <?php echo $instance['zoom']; ?> );
 		        -o-transform-origin: 0 0;
-		        -webkit-transform: scale(0.67);
+		        -webkit-transform: scale( <?php echo $instance['zoom']; ?> );
 		        -webkit-transform-origin: 0 0;
 		    }
 		</style>
