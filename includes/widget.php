@@ -26,13 +26,37 @@ class wpb_widget extends WP_Widget {
 	// This is where the action happens
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', $instance['title'] );
+
 		// before and after widget arguments are defined by themes
 		echo $args['before_widget'];
 		if ( ! empty( $title ) )
 			echo $args['before_title'] . $title . $args['after_title'];
 
 		// This is where you run the code and display the output
-		echo __( 'Hello, World!', 'wpb_widget_domain' );
+		echo __( 'Here is a leadbox...', 'wpb_widget_domain' );
+
+		?>
+		<style>
+		    #wrap { width: 100%; min-width: 200px; height: 390px; padding: 0; }
+		    #frame { max-width: 150%; width: 150%; height: 680px; border: 1px solid black; }
+		    #frame {
+		        -ms-zoom: 0.67;
+		        -moz-transform: scale(0.67);
+		        -moz-transform-origin: 0 0;
+		        -o-transform: scale(0.67);
+		        -o-transform-origin: 0 0;
+		        -webkit-transform: scale(0.67);
+		        -webkit-transform-origin: 0 0;
+		    }
+		</style>
+		<div id="wrap">
+			<iframe 
+				src="https://my.leadpages.net/leadbox/14791da73f72a2%3A147c8da44b46dc/5682617542246400/"
+				frameborder="0"
+				id="frame"
+			></iframe>
+		</div>
+		<?php
 		echo $args['after_widget'];
 	}
 
