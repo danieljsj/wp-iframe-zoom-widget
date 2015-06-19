@@ -17,7 +17,7 @@ class wpb_widget extends WP_Widget {
 			'wpb_widget', 
 
 			// Widget name will appear in UI
-			__('LeadBox iFrame Widget', 'wpb_widget_domain'), 
+			__('LeadBox / iFrame Widget', 'wpb_widget_domain'), 
 
 			// Widget description
 			array( 'description' => __( 'Places a LeadBox (or other) iframe, and provides controls to assure it displays well at all screen-widths', 'wpb_widget_domain' ), ) 
@@ -55,8 +55,8 @@ class wpb_widget extends WP_Widget {
 				src="<?php echo $instance['url']; ?>"
 				frameborder="0"
 				id="frame"
-				data-content-width="350"
-				data-content-height-at-content-width="550"
+				data-content-width="<?php echo $instance['contentWidth']; ?>"
+				data-content-height-at-content-width="<?php echo $instance['contentHeightAtContentWidth']; ?>"
 			></iframe>
 		</div>
 		<?php
@@ -72,13 +72,6 @@ class wpb_widget extends WP_Widget {
 		} else {
 			$url = self::DEFAULT_LEADBOX_URL;
 		}
-
-		// zoom
-		// if ( isset( $instance[ 'zoom' ] ) ) {
-		// 	$zoom = $instance[ 'zoom' ];
-		// } else {
-		// 	$zoom = .9;
-		// }
 		
 		// negativeXMargin
 		if ( isset( $instance[ 'negativeXMargin' ] ) ) {
@@ -87,52 +80,57 @@ class wpb_widget extends WP_Widget {
 			$negativeXMargin = '10px';
 		}
 
+		// contentWidth
+		if ( isset( $instance[ 'contentWidth' ] ) ) {
+			$contentWidth = $instance[ 'contentWidth' ];
+		} else {
+			$contentWidth = 350;
+		}
+
+		// contentHeightAtContentWidth
+		if ( isset( $instance[ 'contentHeightAtContentWidth' ] ) ) {
+			$contentHeightAtContentWidth = $instance[ 'contentHeightAtContentWidth' ];
+		} else {
+			$contentHeightAtContentWidth = 550;
+		}
 
 
 		?>
 		<p>
-			<label 
-				for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e( 'Leadbox URL:' ); ?>
-				</label>
+			<b><label 
+				for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e( 'Leadbox / iFrame URL:' ); ?>
+				</label></b>
+			<br>
 			<input 
+				class="widefat"
 				id="<?php echo $this->get_field_id( 'url' ); ?>" 
 				name="<?php echo $this->get_field_name( 'url' ); ?>" 
 				type="text" 
 				value="<?php echo esc_attr( $url ); ?>" 
 			/>
 		</p>
-		<!-- <p>
-			
-			<label 
-				for="<?php echo $this->get_field_id( 'zoom' ); ?>"><?php _e( 'Zoom:' ); ?>
-				</label>
-			<input 
-				id="<?php echo $this->get_field_id( 'zoom' ); ?>" 
-				name="<?php echo $this->get_field_name( 'zoom' ); ?>" 
-				type="number" 
-				min=".3" 
-				max="2" 
-				step="0.01" 
-				value="<?php echo esc_attr( $zoom ); ?>" 
-			/>
-		</p> -->
 		<p>
-			<label 
+			<b><label 
 				for="<?php echo $this->get_field_id( 'negativeXMargin' ); ?>"><?php _e( 'Widget Expansion:' ); ?>
-				</label>
+				</label></b>
+			<br>
 			<input 
 				id="<?php echo $this->get_field_id( 'negativeXMargin' ); ?>" 
 				name="<?php echo $this->get_field_name( 'negativeXMargin' ); ?>" 
 				type="text"
 				value="<?php echo esc_attr( $negativeXMargin ); ?>" 
 			/>
-			<br><em><?php _e( '(e.g. "10px" or "10%")' ); ?></em>
+			<br>
+			<em><?php _e( '(e.g. "10px" or "10%")' ); ?></em>
 		</p>
 		<p>
 			
-			<label 
-				for="<?php echo $this->get_field_id( 'contentWidth' ); ?>"><?php _e( 'contentWidth:' ); ?>
-				</label>
+			<b><label 
+				for="<?php echo $this->get_field_id( 'contentWidth' ); ?>"><?php _e( 'Content&rsquo;s prettiest / ideal width:' ); ?>
+				</label></b>
+			<br>
+			<?php _e( '(in pixels)' ); ?>
+			<br>
 			<input 
 				id="<?php echo $this->get_field_id( 'contentWidth' ); ?>" 
 				name="<?php echo $this->get_field_name( 'contentWidth' ); ?>" 
@@ -142,16 +140,23 @@ class wpb_widget extends WP_Widget {
 		</p>
 		<p>
 			
-			<label 
-				for="<?php echo $this->get_field_id( 'contentHeightAtContentWidth' ); ?>"><?php _e( 'contentHeightAtContentWidth:' ); ?>
-				</label>
+			<b><label 
+				for="<?php echo $this->get_field_id( 'contentHeightAtContentWidth' ); ?>"><?php _e( 'Content&rsquo;s height at that ideal width:' ); ?>
+				</label></b>
+			<br>
+			<?php _e( '(in pixels)' ); ?>
+			<br>
 			<input 
 				id="<?php echo $this->get_field_id( 'contentHeightAtContentWidth' ); ?>" 
 				name="<?php echo $this->get_field_name( 'contentHeightAtContentWidth' ); ?>" 
 				type="number"
 				value="<?php echo esc_attr( $contentHeightAtContentWidth ); ?>" 
 			/>
+			<br>
+			<em><?php _e( 'If anything, be slightly generous on the height. Firefox is a good browser to use for this testing, because it renders text a bit bigger than other browsers.' ); ?></em>
 		</p>
+		<br>
+		<br>
 		<?php 
 	}
 	
@@ -159,7 +164,6 @@ class wpb_widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['url'] = ( ! empty( $new_instance['url'] ) ) ? strip_tags( $new_instance['url'] ) : '';
-		// $instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? strip_tags( $new_instance['zoom'] ) : '';
 		$instance['contentWidth'] = ( ! empty( $new_instance['contentWidth'] ) ) ? strip_tags( $new_instance['contentWidth'] ) : '';
 		$instance['contentHeightAtContentWidth'] = ( ! empty( $new_instance['contentHeightAtContentWidth'] ) ) ? strip_tags( $new_instance['contentHeightAtContentWidth'] ) : '';
 		$instance['negativeXMargin'] = ( ! empty( $new_instance['negativeXMargin'] ) ) ? strip_tags( $new_instance['negativeXMargin'] ) : '';

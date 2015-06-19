@@ -4,10 +4,11 @@ TODOs
 
 	in terms of UX:
 
-		- Allow the widget to specify "ideal" height and width for the LeadBox iframe (rather than hardcoding)
+		- More clarity about "ideal" values, how to find them
 		- Create dynamic previews at 200px, 300px, 400px, 600px in the widgets area, to help users quickly select the best width and height
 		- Figure out how the [X] button on the leadbox is intended to work...
 		- Create a WP shortcode so the leadbox can be deployed in post/page content
+		- Make boxes start out pretty, not wait till page loads to scale properly
 
 
 	in general:
@@ -21,3 +22,4 @@ TODOs
 		- decide whether this plugin is primarily for iframes, or also for other code blocks, and adjust functionality and UX naming accordingly
 		- figure out just how badly / how recently this fails on crap browsers (IE)... and figure out graceful fail-plans
 		- write a readme file
+		- make sure widget expansion never makes the widget get bigger than the device width.
