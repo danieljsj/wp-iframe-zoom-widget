@@ -27,7 +27,7 @@ class wpb_widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		
-		$instance['zoom'] = .67; // CHEATING!!!
+		// if (!$instance['zoom']) $instance['zoom'] = .67; // CHEATING!!!
 
 		// before and after widget arguments are defined by themes
 		echo $args['before_widget'];
@@ -75,11 +75,19 @@ class wpb_widget extends WP_Widget {
 		else {
 			$title = __( 'New title', 'wpb_widget_domain' );
 		}
+		if ( isset( $instance[ 'zoom' ] ) ) {
+			$zoom = $instance[ 'zoom' ];
+		}
+		else {
+			$zoom = __( '.9', 'wpb_widget_domain' );
+		}
 		// Widget admin form
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'zoom' ); ?>"><?php _e( 'Zoom:' ); ?></label>
+			<input type="number" min=".3" max="2" step="0.01" id="<?php echo $this->get_field_id( 'zoom' ); ?>" name="<?php echo $this->get_field_name( 'zoom' ); ?>" value="<?php echo $instance['zoom']; ?>" />
 		</p>
 		<?php 
 	}
@@ -88,6 +96,7 @@ class wpb_widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? $new_instance['zoom'] : '';
 		return $instance;
 	}
 } // Class wpb_widget ends here
