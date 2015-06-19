@@ -1,70 +1,8 @@
 <?php 
 
-
-// AS A CLASS; WP_REGISTER_WIDGET() :
-// https://codex.wordpress.org/Function_Reference/register_widget
-
-
-class MyNewWidget extends WP_Widget {
-
-	function MyNewWidget() {
-		// Instantiate the parent object
-		parent::__construct( false, 'My New Widget Title' );
-	}
-
-	function widget( $args, $instance ) {
-		// Widget output
-	}
-
-	function update( $new_instance, $old_instance ) {
-		// Save widget options
-	}
-
-	function form( $instance ) {
-		// Output admin widget options form
-	}
-}
-
-function myplugin_register_widgets() {
-	register_widget( 'MyNewWidget' );
-}
-
-add_action( 'widgets_init', 'myplugin_register_widgets' );
-
-
-
-
-
-
-// PROCEDURAL; WP_REGISTER_SIDEBAR_WIDGET() :
-// https://codex.wordpress.org/Function_Reference/wp_register_sidebar_widget
-
-
-function your_widget_display($args) {
-   echo $args['before_widget'];
-   echo $args['before_title'] . 'My Unique Widget' .  $args['after_title'];
-   echo $args['after_widget'];
-   // print some HTML for the widget to display here
-   echo "Your Widget Test";
-}
-
-wp_register_sidebar_widget(
-    'your_widget_1',        // your unique widget id
-    'Your Widget',          // widget name
-    'your_widget_display',  // callback function
-    array(                  // options
-        'description' => 'Description of what your widget does'
-    )
-);
-
-
-
-
-
-
-
-// MORE INVOLVED: WPBEGINNER: 
+// REFS:
 // http://www.wpbeginner.com/wp-tutorials/how-to-create-a-custom-wordpress-widget/
+// https://codex.wordpress.org/Widgets_API
 
 
 
