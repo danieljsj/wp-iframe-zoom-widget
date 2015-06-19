@@ -23,3 +23,5 @@ TODOs
 		- figure out just how badly / how recently this fails on crap browsers (IE)... and figure out graceful fail-plans
 		- write a readme file
 		- make sure widget expansion never makes the widget get bigger than the device width.
+		- add a clearfix after the widget; esp. relevant when pulled into pages.
+		- security: filter input, escape output. (or something like that)
