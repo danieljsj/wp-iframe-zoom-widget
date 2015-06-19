@@ -37,9 +37,9 @@ class wpb_widget extends WP_Widget {
 
 		?>
 		<style>
-		    #wrap { height: 390px; padding: 0; margin: 0 -<?php echo $instance['negativeXMargin']?> 0 -<?php echo $instance['negativeXMargin']?>; }
-		    #frame { max-width: <?php echo $widthStr ?>; width: <?php echo $widthStr ?>; height: 680px; border: 1px solid black; }
-		    #frame {
+		    #wrap { padding: 0; /* todo: bring this to js, making sure it doesn't overflow narrow devices: */ margin: 0 -<?php echo $instance['negativeXMargin']?> 0 -<?php echo $instance['negativeXMargin']?>; }
+		    #frame { /*max-width: <?php echo $widthStr ?>; width: <?php echo $widthStr ?>; height: 680px;*/ border: 1px solid black; }
+		    /*#frame {
 		        -ms-zoom: <?php echo $instance['zoom']; ?>;
 		        -moz-transform: scale( <?php echo $instance['zoom']; ?> );
 		        -moz-transform-origin: 0 0;
@@ -47,13 +47,16 @@ class wpb_widget extends WP_Widget {
 		        -o-transform-origin: 0 0;
 		        -webkit-transform: scale( <?php echo $instance['zoom']; ?> );
 		        -webkit-transform-origin: 0 0;
-		    }
+		    }*/
 		</style>
-		<div id="wrap">
+		<div id="wrap" class-NOT="scaleBoxWrapper">
 			<iframe 
+				class="scaleBox"
 				src="<?php echo $instance['url']; ?>"
 				frameborder="0"
 				id="frame"
+				data-content-width="350"
+				data-content-height-at-content-width="550"
 			></iframe>
 		</div>
 		<?php
@@ -71,11 +74,11 @@ class wpb_widget extends WP_Widget {
 		}
 
 		// zoom
-		if ( isset( $instance[ 'zoom' ] ) ) {
-			$zoom = $instance[ 'zoom' ];
-		} else {
-			$zoom = .9;
-		}
+		// if ( isset( $instance[ 'zoom' ] ) ) {
+		// 	$zoom = $instance[ 'zoom' ];
+		// } else {
+		// 	$zoom = .9;
+		// }
 		
 		// negativeXMargin
 		if ( isset( $instance[ 'negativeXMargin' ] ) ) {
@@ -98,7 +101,7 @@ class wpb_widget extends WP_Widget {
 				value="<?php echo esc_attr( $url ); ?>" 
 			/>
 		</p>
-		<p>
+		<!-- <p>
 			
 			<label 
 				for="<?php echo $this->get_field_id( 'zoom' ); ?>"><?php _e( 'Zoom:' ); ?>
@@ -112,7 +115,7 @@ class wpb_widget extends WP_Widget {
 				step="0.01" 
 				value="<?php echo esc_attr( $zoom ); ?>" 
 			/>
-		</p>
+		</p> -->
 		<p>
 			<label 
 				for="<?php echo $this->get_field_id( 'negativeXMargin' ); ?>"><?php _e( 'Widget Expansion:' ); ?>
@@ -125,6 +128,30 @@ class wpb_widget extends WP_Widget {
 			/>
 			<br><em><?php _e( '(e.g. "10px" or "10%")' ); ?></em>
 		</p>
+		<p>
+			
+			<label 
+				for="<?php echo $this->get_field_id( 'contentWidth' ); ?>"><?php _e( 'contentWidth:' ); ?>
+				</label>
+			<input 
+				id="<?php echo $this->get_field_id( 'contentWidth' ); ?>" 
+				name="<?php echo $this->get_field_name( 'contentWidth' ); ?>" 
+				type="number"
+				value="<?php echo esc_attr( $contentWidth ); ?>" 
+			/>
+		</p>
+		<p>
+			
+			<label 
+				for="<?php echo $this->get_field_id( 'contentHeightAtContentWidth' ); ?>"><?php _e( 'contentHeightAtContentWidth:' ); ?>
+				</label>
+			<input 
+				id="<?php echo $this->get_field_id( 'contentHeightAtContentWidth' ); ?>" 
+				name="<?php echo $this->get_field_name( 'contentHeightAtContentWidth' ); ?>" 
+				type="number"
+				value="<?php echo esc_attr( $contentHeightAtContentWidth ); ?>" 
+			/>
+		</p>
 		<?php 
 	}
 	
@@ -132,7 +159,9 @@ class wpb_widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['url'] = ( ! empty( $new_instance['url'] ) ) ? strip_tags( $new_instance['url'] ) : '';
-		$instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? strip_tags( $new_instance['zoom'] ) : '';
+		// $instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? strip_tags( $new_instance['zoom'] ) : '';
+		$instance['contentWidth'] = ( ! empty( $new_instance['contentWidth'] ) ) ? strip_tags( $new_instance['contentWidth'] ) : '';
+		$instance['contentHeightAtContentWidth'] = ( ! empty( $new_instance['contentHeightAtContentWidth'] ) ) ? strip_tags( $new_instance['contentHeightAtContentWidth'] ) : '';
 		$instance['negativeXMargin'] = ( ! empty( $new_instance['negativeXMargin'] ) ) ? strip_tags( $new_instance['negativeXMargin'] ) : '';
 		return $instance;
 	}
