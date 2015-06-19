@@ -17,10 +17,10 @@ class wpb_widget extends WP_Widget {
 			'wpb_widget', 
 
 			// Widget name will appear in UI
-			__('WPBeginner Widget', 'wpb_widget_domain'), 
+			__('LeadBox iFrame Widget', 'wpb_widget_domain'), 
 
 			// Widget description
-			array( 'description' => __( 'Sample widget based on WPBeginner Tutorial', 'wpb_widget_domain' ), ) 
+			array( 'description' => __( 'Places a LeadBox (or other) iframe, and provides controls to assure it displays well at all screen-widths', 'wpb_widget_domain' ), ) 
 			);
 	}
 
@@ -30,20 +30,14 @@ class wpb_widget extends WP_Widget {
 
 		// before and after widget arguments are defined by themes
 		echo $args['before_widget'];
-		if ( ! empty( $title ) )
-			echo $args['before_title'] . $title . $args['after_title'];
 
-
-
-		// This is where you run the code and display the output
-		echo __( 'Here is a leadbox...', 'wpb_widget_domain' );
 
 		$widthStr = sprintf("%.2f%%", ( 1 / $instance['zoom'] ) * 100)
 
 
 		?>
 		<style>
-		    #wrap { width: 100%; /*min-width: 200px;*/ height: 390px; padding: 0; }
+		    #wrap { height: 390px; padding: 0; margin: 0 -<?php echo $instance['negativeXMargin']?> 0 -<?php echo $instance['negativeXMargin']?>; }
 		    #frame { max-width: <?php echo $widthStr ?>; width: <?php echo $widthStr ?>; height: 680px; border: 1px solid black; }
 		    #frame {
 		        -ms-zoom: <?php echo $instance['zoom']; ?>;
@@ -68,19 +62,30 @@ class wpb_widget extends WP_Widget {
 
 	// Widget Backend 
 	public function form( $instance ) {
+		
+		// url
 		if ( isset( $instance[ 'url' ] ) && $instance['url'] ) {
 			$url = $instance[ 'url' ];
-		}
-		else {
+		} else {
 			$url = self::DEFAULT_LEADBOX_URL;
 		}
+
+		// zoom
 		if ( isset( $instance[ 'zoom' ] ) ) {
 			$zoom = $instance[ 'zoom' ];
-		}
-		else {
+		} else {
 			$zoom = .9;
 		}
-		// Widget admin form
+		
+		// negativeXMargin
+		if ( isset( $instance[ 'negativeXMargin' ] ) ) {
+			$negativeXMargin = $instance['negativeXMargin'];
+		} else {
+			$negativeXMargin = '10px';
+		}
+
+
+
 		?>
 		<p>
 			<label 
@@ -92,7 +97,9 @@ class wpb_widget extends WP_Widget {
 				type="text" 
 				value="<?php echo esc_attr( $url ); ?>" 
 			/>
-			<br>
+		</p>
+		<p>
+			
 			<label 
 				for="<?php echo $this->get_field_id( 'zoom' ); ?>"><?php _e( 'Zoom:' ); ?>
 				</label>
@@ -106,6 +113,18 @@ class wpb_widget extends WP_Widget {
 				value="<?php echo esc_attr( $zoom ); ?>" 
 			/>
 		</p>
+		<p>
+			<label 
+				for="<?php echo $this->get_field_id( 'negativeXMargin' ); ?>"><?php _e( 'Widget Expansion:' ); ?>
+				</label>
+			<input 
+				id="<?php echo $this->get_field_id( 'negativeXMargin' ); ?>" 
+				name="<?php echo $this->get_field_name( 'negativeXMargin' ); ?>" 
+				type="text"
+				value="<?php echo esc_attr( $negativeXMargin ); ?>" 
+			/>
+			<br><em><?php _e( '(e.g. "10px" or "10%")' ); ?></em>
+		</p>
 		<?php 
 	}
 	
@@ -113,7 +132,8 @@ class wpb_widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['url'] = ( ! empty( $new_instance['url'] ) ) ? strip_tags( $new_instance['url'] ) : '';
-		$instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? $new_instance['zoom'] : '';
+		$instance['zoom'] = ( ! empty( $new_instance['zoom'] ) ) ? strip_tags( $new_instance['zoom'] ) : '';
+		$instance['negativeXMargin'] = ( ! empty( $new_instance['negativeXMargin'] ) ) ? strip_tags( $new_instance['negativeXMargin'] ) : '';
 		return $instance;
 	}
 } // Class wpb_widget ends here
